@@ -32,7 +32,7 @@ public class JwtService {
                 .compact();
     }
 
-    private String extractUserId(String token) {
+    public String extractUsername(String token) {
         Claims claims = extractAllClaims(token);
         return claims.get("username").toString();
     }
@@ -65,7 +65,7 @@ public class JwtService {
         return username.equals(userDetails.getUsername()) && isTokenValid(token);
     }
 
-    public String extractUsername(String token) {
-        return extractAllClaims(token).getSubject();
-    }
+//    public String extractUsername(String token) {
+//        return extractAllClaims(token).getSubject();
+//    }
 }

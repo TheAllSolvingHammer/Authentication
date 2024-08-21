@@ -1,5 +1,7 @@
 package com.tinqinacademy.authentication.api.mappings;
 
+import java.util.List;
+
 public class MappingConstants {
     private static final String auth="auth/";
     public static final String login=auth+"login";
@@ -9,4 +11,6 @@ public class MappingConstants {
     public static final String change=auth+"change-password";
     public static final String promote=auth+"promote";
     public static final String demote=auth+"demote";
+    public static final List<String> adminPaths=List.of(promote,demote);
+
 }
