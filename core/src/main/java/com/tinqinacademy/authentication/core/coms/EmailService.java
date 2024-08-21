@@ -25,4 +25,15 @@ public class EmailService {
         helper.setText(htmlMsg,true);
         javaMailSender.send(mimeMessage);
     }
+
+    public void emailRecovery(String toEmail,String code) throws MessagingException{
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
+        helper.setFrom(emailSender);
+        helper.setTo(toEmail);
+        helper.setSubject("Recover password");
+        String htmlMsg = "Dear client,<br><br>Your recovery code is <b>"+code+"</b><br><br>Yours sincerely,<br>The Authentication Support team";
+        helper.setText(htmlMsg,true);
+        javaMailSender.send(mimeMessage);
+    }
 }

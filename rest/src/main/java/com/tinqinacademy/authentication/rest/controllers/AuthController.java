@@ -8,6 +8,7 @@ import com.tinqinacademy.authentication.api.model.register.UserRegistrationInput
 import com.tinqinacademy.authentication.api.model.login.LoginInput;
 import com.tinqinacademy.authentication.api.model.recovery.EmailRecoveryInput;
 import com.tinqinacademy.authentication.core.processes.ActivateProcessor;
+import com.tinqinacademy.authentication.core.processes.EmailRecoveryProcessor;
 import com.tinqinacademy.authentication.core.processes.LoginProcessor;
 import com.tinqinacademy.authentication.core.processes.RegisterProcessor;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,6 +26,7 @@ public class AuthController extends BaseController{
     private final RegisterProcessor registerProcessor;
     private final ActivateProcessor activateProcessor;
     private final LoginProcessor loginProcessor;
+    private final EmailRecoveryProcessor emailRecoveryProcessor;
 
     @PostMapping(MappingConstants.login)
     @ApiResponses(value = {
@@ -59,7 +61,7 @@ public class AuthController extends BaseController{
     })
     @Operation(summary = "Recovers password")
     public ResponseEntity<?> recover(@RequestBody EmailRecoveryInput input){
-        return ResponseEntity.ok("d2");
+        return handleOperation(emailRecoveryProcessor.process(input));
     }
 
     @PostMapping(MappingConstants.confirm)

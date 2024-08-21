@@ -5,7 +5,6 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.UUID;
-
 @Getter
 @Setter
 @ToString
@@ -13,14 +12,14 @@ import java.util.UUID;
 @AllArgsConstructor()
 @Builder
 @Entity
-@Table(name="activate_code")
-public class ActivateCodeEntity {
+@Table(name="recovery_code")
+public class RecoveryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", updatable = false, nullable = false)
     private UUID uuid;
 
-    @Column(name = "code", nullable = false,unique = true, length = 10)
+    @Column(name = "code", nullable = false,unique = true, length = 15)
     private String code;
 
     @Column(name = "email", nullable = false, unique = true, length = 64)
@@ -28,6 +27,4 @@ public class ActivateCodeEntity {
 
     @Column(name = "created_at", updatable = false)
     private LocalDate createdAt;
-
-
 }
