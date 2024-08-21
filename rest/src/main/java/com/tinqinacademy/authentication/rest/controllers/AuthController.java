@@ -1,8 +1,10 @@
 package com.tinqinacademy.authentication.rest.controllers;
 
+import com.tinqinacademy.authentication.api.exceptions.ErrorsProcessor;
 import com.tinqinacademy.authentication.api.mappings.MappingConstants;
 import com.tinqinacademy.authentication.api.model.activate.ActivateInput;
 import com.tinqinacademy.authentication.api.model.change.ChangePasswordInput;
+import com.tinqinacademy.authentication.api.model.login.LoginOutput;
 import com.tinqinacademy.authentication.api.model.promote.PromotionInput;
 import com.tinqinacademy.authentication.api.model.register.UserRegistrationInput;
 import com.tinqinacademy.authentication.api.model.login.LoginInput;
@@ -14,7 +16,9 @@ import com.tinqinacademy.authentication.core.processes.RegisterProcessor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.vavr.control.Either;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,7 +41,12 @@ public class AuthController extends BaseController{
     })
     @Operation(summary = "Logs in user")
     public ResponseEntity<?>  loginUser(@RequestBody LoginInput input){
-        return handleOperation(loginProcessor.process(input));
+        Either<ErrorsProcessor, LoginOutput> result=loginProcessor.process(input);
+        return result.fold(
+                error -> ResponseEntity.status(error.getHttpStatus()).body(error),
+                success-> ResponseEntity.status(HttpStatus.OK.value()).headers(success.getHeaders()).body("Successfully logged in!")
+        );
+
     }
 
     @PostMapping(MappingConstants.register)

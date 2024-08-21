@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,13 +30,11 @@ public class LoginProcessor extends BaseProcessor implements LoginOperation {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
-    private final HttpServletResponse response;
-    public LoginProcessor(Validator validator, ConversionService conversionService, ErrorsProcessor errorMapper, UserRepository userRepository, JwtService jwtService, PasswordEncoder passwordEncoder, HttpServletResponse response) {
+    public LoginProcessor(Validator validator, ConversionService conversionService, ErrorsProcessor errorMapper, UserRepository userRepository, JwtService jwtService, PasswordEncoder passwordEncoder) {
         super(validator, conversionService, errorMapper);
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
-        this.response = response;
     }
 
     @Override
@@ -51,9 +50,10 @@ public class LoginProcessor extends BaseProcessor implements LoginOperation {
         claims.put("role", user.getRoleType().name());
 
         String token = jwtService.generateToken(claims);
-        response.setHeader("Authorization", "Bearer " + token);
+                    HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
         LoginOutput output = LoginOutput.builder()
-                .message("Successfully logged in, token: "+token)
+                .headers(headers)
                 .build();
         log.info("End log in operation {}",output);
         return output;

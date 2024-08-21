@@ -2,6 +2,7 @@ package com.tinqinacademy.authentication.api.model.login;
 
 import com.tinqinacademy.authentication.api.base.OperationOutput;
 import lombok.*;
+import org.springframework.http.HttpHeaders;
 
 @Getter
 @Setter
@@ -10,5 +11,5 @@ import lombok.*;
 @AllArgsConstructor()
 @Builder
 public class LoginOutput implements OperationOutput {
-    private String message;
+    private HttpHeaders headers;
 }
