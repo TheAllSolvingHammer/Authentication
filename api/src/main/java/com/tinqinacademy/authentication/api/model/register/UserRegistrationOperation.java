@@ -1,4 +1,4 @@
-package com.tinqinacademy.authentication.api.model.confirmation;
+package com.tinqinacademy.authentication.api.model.register;
 
 import com.tinqinacademy.authentication.api.base.OperationProcessor;
 

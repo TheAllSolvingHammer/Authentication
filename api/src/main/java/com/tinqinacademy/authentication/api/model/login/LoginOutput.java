@@ -10,5 +10,5 @@ import lombok.*;
 @AllArgsConstructor()
 @Builder
 public class LoginOutput implements OperationOutput {
-    private String jwt;
+    private String message;
 }
