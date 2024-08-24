@@ -6,11 +6,9 @@ import com.tinqinacademy.authentication.api.model.change.ChangePasswordInput;
 import com.tinqinacademy.authentication.api.model.promote.PromotionInput;
 import com.tinqinacademy.authentication.api.model.register.UserRegistrationInput;
 import com.tinqinacademy.authentication.api.model.login.LoginInput;
-import com.tinqinacademy.authentication.api.model.recovery.EmailRecoveryInput;
-import com.tinqinacademy.authentication.core.processes.ActivateProcessor;
-import com.tinqinacademy.authentication.core.processes.EmailRecoveryProcessor;
-import com.tinqinacademy.authentication.core.processes.LoginProcessor;
-import com.tinqinacademy.authentication.core.processes.RegisterProcessor;
+import com.tinqinacademy.authentication.api.model.email.EmailRecoveryInput;
+import com.tinqinacademy.authentication.api.model.remove.RemovePrivilegesInput;
+import com.tinqinacademy.authentication.core.processes.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -27,6 +25,7 @@ public class AuthController extends BaseController{
     private final ActivateProcessor activateProcessor;
     private final LoginProcessor loginProcessor;
     private final EmailRecoveryProcessor emailRecoveryProcessor;
+    private final DemoteProcessor demoteProcessor;
 
     @PostMapping(MappingConstants.login)
     @ApiResponses(value = {
@@ -104,12 +103,13 @@ public class AuthController extends BaseController{
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Demoted admin successfully"),
             @ApiResponse(responseCode = "400", description = "Wrong syntax"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden request"),
             @ApiResponse(responseCode = "404", description = "Server was not found")
     })
     @Operation(summary = "Demotes user account")
-    public ResponseEntity<?> demote(@RequestBody ActivateInput input){
-        return ResponseEntity.ok("d2");
+    public ResponseEntity<?> demote(@RequestBody RemovePrivilegesInput input){
+        return handleOperation(demoteProcessor.process(input));
     }
 
 }

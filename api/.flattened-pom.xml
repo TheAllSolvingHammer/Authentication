@@ -2,7 +2,7 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.tinqinacademy</groupId>
+  <groupId>com.tinqinacademy.authentication</groupId>
   <artifactId>api</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <licenses>
@@ -28,7 +28,7 @@
     <dependency>
       <groupId>de.codecentric</groupId>
       <artifactId>spring-boot-admin-starter-client</artifactId>
-      <version>3.0.0</version>
+      <version>3.3.2</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

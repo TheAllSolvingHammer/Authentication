@@ -1,4 +1,4 @@
-package com.tinqinacademy.authentication.api.model.recovery;
+package com.tinqinacademy.authentication.api.model.recover;
 
 import com.tinqinacademy.authentication.api.base.OperationInput;
 import lombok.*;
@@ -9,6 +9,8 @@ import lombok.*;
 @NoArgsConstructor()
 @AllArgsConstructor()
 @Builder
-public class EmailRecoveryInput implements OperationInput {
+public class PasswordMailRecoverInput implements OperationInput {
     private String email;
+    private String code;
+    private String newPassword;
 }
