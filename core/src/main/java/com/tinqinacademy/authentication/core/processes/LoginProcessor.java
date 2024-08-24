@@ -12,7 +12,6 @@ import com.tinqinacademy.authentication.persistence.entities.UserEntity;
 import com.tinqinacademy.authentication.persistence.repositories.UserRepository;
 import io.vavr.control.Either;
 import io.vavr.control.Try;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
@@ -46,10 +45,9 @@ public class LoginProcessor extends BaseProcessor implements LoginOperation {
         checkUserConfirm(user);
         checkPasswordMatch(input.getPassword(),user);
         Map<String, String> claims = new HashMap<>();
-        claims.put("username", input.getUsername());
         claims.put("role", user.getRoleType().name());
 
-        String token = jwtService.generateToken(claims);
+        String token = jwtService.generateToken(claims,user.getUsername());
                     HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
         LoginOutput output = LoginOutput.builder()

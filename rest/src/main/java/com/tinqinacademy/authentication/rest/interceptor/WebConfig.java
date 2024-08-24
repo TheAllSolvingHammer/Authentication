@@ -1,6 +1,7 @@
 package com.tinqinacademy.authentication.rest.interceptor;
 
 
+import com.tinqinacademy.authentication.api.mappings.MappingConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         log.info("Started add interceptor");
-        registry.addInterceptor(simpleUserInterceptor).addPathPatterns("/auth/**");
+        registry.addInterceptor(simpleUserInterceptor).addPathPatterns(
+                MappingConstants.demote
+                ,MappingConstants.promote
+                ,MappingConstants.change);
     }
 }

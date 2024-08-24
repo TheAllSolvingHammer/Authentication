@@ -3,5 +3,5 @@ WORKDIR /app
 
 COPY rest/target/*.jar rest.jar
 
-EXPOSE 8080
+EXPOSE 8085
 ENTRYPOINT ["java","-jar","rest.jar"]

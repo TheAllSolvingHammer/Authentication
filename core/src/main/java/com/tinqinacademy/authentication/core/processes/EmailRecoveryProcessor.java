@@ -2,13 +2,12 @@ package com.tinqinacademy.authentication.core.processes;
 
 import com.tinqinacademy.authentication.api.exceptions.EntityException;
 import com.tinqinacademy.authentication.api.exceptions.ErrorsProcessor;
-import com.tinqinacademy.authentication.api.model.recovery.EmailRecoveryInput;
-import com.tinqinacademy.authentication.api.model.recovery.EmailRecoveryOperation;
-import com.tinqinacademy.authentication.api.model.recovery.EmailRecoveryOutput;
+import com.tinqinacademy.authentication.api.model.email.EmailRecoveryInput;
+import com.tinqinacademy.authentication.api.model.email.EmailRecoveryOperation;
+import com.tinqinacademy.authentication.api.model.email.EmailRecoveryOutput;
 import com.tinqinacademy.authentication.core.coms.EmailService;
 import com.tinqinacademy.authentication.core.families.casehandlers.InputQueryEntityExceptionCase;
 import com.tinqinacademy.authentication.persistence.entities.RecoveryEntity;
-import com.tinqinacademy.authentication.persistence.entities.UserEntity;
 import com.tinqinacademy.authentication.persistence.repositories.RecoveryCodeRepository;
 import com.tinqinacademy.authentication.persistence.repositories.UserRepository;
 import io.vavr.control.Either;

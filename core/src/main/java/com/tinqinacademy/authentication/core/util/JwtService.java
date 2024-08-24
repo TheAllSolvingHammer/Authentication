@@ -21,21 +21,18 @@ public class JwtService {
 
     @Value("${security.token.expiration}")
     private Long jwtExpiration;
-    public String generateToken(Map<String, String> claims)
+    public String generateToken(Map<String, String> claims,String subject)
     {
         return Jwts
                 .builder()
                 .setClaims(claims)
+                .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String extractUsername(String token) {
-        Claims claims = extractAllClaims(token);
-        return claims.get("username").toString();
-    }
 
     public Claims extractAllClaims(String token) {
             return Jwts
@@ -65,7 +62,7 @@ public class JwtService {
         return username.equals(userDetails.getUsername()) && isTokenValid(token);
     }
 
-//    public String extractUsername(String token) {
-//        return extractAllClaims(token).getSubject();
-//    }
+    public String extractUsername(String token) {
+        return extractAllClaims(token).getSubject();
+    }
 }

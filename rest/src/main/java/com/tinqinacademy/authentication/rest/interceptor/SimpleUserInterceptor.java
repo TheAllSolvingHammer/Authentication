@@ -9,6 +9,7 @@ import com.tinqinacademy.authentication.persistence.repositories.UserRepository;
 import com.tinqinacademy.authentication.rest.credentials.LoggedUser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
@@ -16,7 +17,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.io.IOException;
 import java.util.Optional;
-
+@Slf4j
 @Component
 public class SimpleUserInterceptor implements HandlerInterceptor {
 private final LoggedUser loggedUser;
@@ -31,6 +32,7 @@ private final UserRepository userRepository;
 
     @Override
 public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
+    log.info("Started simple interception");
     String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
     if (authorization == null || !authorization.startsWith("Bearer ")) {
         response.sendError(HttpServletResponse.SC_FORBIDDEN);
@@ -51,19 +53,23 @@ public boolean preHandle(HttpServletRequest request, HttpServletResponse respons
     }
 
     if (isAdminPath(request.getRequestURI()) && !userOptional.get().getRoleType().equals(RoleType.ADMIN)) {
-        response.sendError(HttpServletResponse.SC_FORBIDDEN);
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
         return false;
     }
 
+
+
     loggedUser.setLoggedUser(userOptional.get());
     loggedUser.setToken(jwtToken);
+
     return true;
 }
 
 
-private boolean isAdminPath(String requestUri) {
-    AntPathMatcher antPathMatcher = new AntPathMatcher();
-    return MappingConstants.adminPaths.stream()
-            .anyMatch(path -> antPathMatcher.match(path, requestUri));
-}
+    private boolean isAdminPath(String requestUri) {
+        AntPathMatcher antPathMatcher = new AntPathMatcher();
+        return MappingConstants.adminPaths.stream()
+                .anyMatch(path -> antPathMatcher.match(path, requestUri));
+    }
+
 }

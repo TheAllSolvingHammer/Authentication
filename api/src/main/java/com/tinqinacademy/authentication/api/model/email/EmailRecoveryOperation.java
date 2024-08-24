@@ -1,4 +1,4 @@
-package com.tinqinacademy.authentication.api.model.recovery;
+package com.tinqinacademy.authentication.api.model.email;
 
 import com.tinqinacademy.authentication.api.base.OperationProcessor;
 

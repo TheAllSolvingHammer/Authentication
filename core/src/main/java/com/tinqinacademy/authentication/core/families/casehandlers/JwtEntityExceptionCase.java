@@ -4,8 +4,8 @@ import com.tinqinacademy.authentication.api.exceptions.EntityException;
 import com.tinqinacademy.authentication.api.exceptions.ErrorsProcessor;
 import com.tinqinacademy.authentication.api.exceptions.InputException;
 import com.tinqinacademy.authentication.api.exceptions.TokenException;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.vavr.API;
-import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 
@@ -41,8 +41,8 @@ public class JwtEntityExceptionCase {
                             .message(e.getMessage())
                             .build();
                 }),
-                Case($(instanceOf(MessagingException.class)), e -> {
-                    log.error("Email error: {}", e.getMessage());
+                Case($(instanceOf(ExpiredJwtException.class)), e -> {
+                    log.error("Token expired: {}", e.getMessage());
                     return ErrorsProcessor.builder()
                             .httpStatus(HttpStatus.NOT_FOUND)
                             .statusCode(HttpStatus.NOT_FOUND.value())
