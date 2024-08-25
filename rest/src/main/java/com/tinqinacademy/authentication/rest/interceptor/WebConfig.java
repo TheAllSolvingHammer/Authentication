@@ -24,6 +24,6 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(simpleUserInterceptor).addPathPatterns(
                 MappingConstants.demote
                 ,MappingConstants.promote
-                ,MappingConstants.change);
+                ,MappingConstants.change,MappingConstants.logout);
     }
 }

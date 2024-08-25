@@ -13,6 +13,7 @@ import io.vavr.control.Either;
 import io.vavr.control.Try;
 import jakarta.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Service;
 public class DemoteProcessor extends BaseProcessor implements RemovePrivilegesOperation {
     private final UserRepository userRepository;
 
-
+    @Autowired
     public DemoteProcessor(Validator validator, ConversionService conversionService, ErrorsProcessor errorMapper, UserRepository userRepository) {
         super(validator, conversionService, errorMapper);
         this.userRepository = userRepository;

@@ -15,6 +15,7 @@ import io.vavr.control.Try;
 import jakarta.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,7 @@ public class EmailRecoveryProcessor extends BaseProcessor implements EmailRecove
     private final UserRepository userRepository;
     private final EmailService emailService;
     private final RecoveryCodeRepository recoveryCodeRepository;
-
+    @Autowired
     public EmailRecoveryProcessor(Validator validator, ConversionService conversionService, ErrorsProcessor errorMapper, UserRepository userRepository, EmailService emailService, RecoveryCodeRepository recoveryCodeRepository) {
         super(validator, conversionService, errorMapper);
         this.userRepository = userRepository;
