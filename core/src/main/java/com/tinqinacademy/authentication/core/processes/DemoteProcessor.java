@@ -30,25 +30,21 @@ public class DemoteProcessor extends BaseProcessor implements RemovePrivilegesOp
 
     @Override
     public Either<ErrorsProcessor, RemovePrivilegesOutput> process(RemovePrivilegesInput input) {
-        return validateInput(input).flatMap(validInput -> Try.of(()->{
-            log.info("Started remove privileges operation{}",input);
-           
-            UserEntity userEntity=userRepository.getReferenceById(input.getId());
-            checkForLowerPrivileges(userEntity);
-            userEntity.setRoleType(RoleType.USER);
-            userRepository.save(userEntity);
+        return validateInput(input).flatMap(validInput -> Try.of(() -> {
+                    UserEntity userEntity = userRepository.getReferenceById(input.getId());
+                    checkForLowerPrivileges(userEntity);
+                    userEntity.setRoleType(RoleType.USER);
+                    userRepository.save(userEntity);
 
-            RemovePrivilegesOutput output = RemovePrivilegesOutput.builder()
-                    .message("Successfully demoted user")
-                    .build();
-            log.info("End removed privileges operation{}",output);
-            return output;
+                    return RemovePrivilegesOutput.builder()
+                            .message("Successfully demoted user")
+                            .build();
                 }).toEither()
                 .mapLeft(InputQueryEntityExceptionCase::handleThrowable));
     }
 
     private void checkForLowerPrivileges(UserEntity userEntity) {
-        if(userEntity.getRoleType()==RoleType.USER){
+        if (userEntity.getRoleType() == RoleType.USER) {
             throw new EntityException("User already has the lowest right on the system");
         }
     }

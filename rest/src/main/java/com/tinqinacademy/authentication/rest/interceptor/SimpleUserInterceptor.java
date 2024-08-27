@@ -32,7 +32,6 @@ private final UserRepository userRepository;
 
     @Override
 public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
-    log.info("Started simple interception");
     String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
     if (authorization == null || !authorization.startsWith("Bearer ")) {
         response.sendError(HttpServletResponse.SC_FORBIDDEN);
