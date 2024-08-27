@@ -43,8 +43,6 @@ public class LoginProcessor extends BaseProcessor implements LoginOperation {
     @Override
     public Either<ErrorsProcessor, LoginOutput> process(LoginInput input) {
         return validateInput(input).flatMap(validInput -> Try.of(() -> {
-
-                    log.info("Started log in operation {}", input);
                     UserEntity user = getUser(input.getUsername());
                     checkUserConfirm(user);
                     checkPasswordMatch(input.getPassword(), user);
@@ -53,11 +51,9 @@ public class LoginProcessor extends BaseProcessor implements LoginOperation {
                     String token = jwtService.generateToken(claims, user.getUsername());
                     HttpHeaders headers = new HttpHeaders();
                     headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
-                    LoginOutput output = LoginOutput.builder()
+                    return LoginOutput.builder()
                             .headers(headers)
                             .build();
-                    log.info("End log in operation {}", output);
-                    return output;
                 }).toEither()
                 .mapLeft(InputQueryEntityExceptionCase::handleThrowable));
     }

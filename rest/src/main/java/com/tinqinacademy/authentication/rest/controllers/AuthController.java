@@ -13,6 +13,7 @@ import com.tinqinacademy.authentication.api.model.login.LoginInput;
 import com.tinqinacademy.authentication.api.model.email.EmailRecoveryInput;
 import com.tinqinacademy.authentication.api.model.remove.RemovePrivilegesInput;
 import com.tinqinacademy.authentication.api.model.validate.ValidateInput;
+import com.tinqinacademy.authentication.core.aspect.LogExecution;
 import com.tinqinacademy.authentication.core.processes.*;
 import com.tinqinacademy.authentication.rest.credentials.LoggedUser;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,7 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
+@LogExecution
 @RestController
 @RequiredArgsConstructor
 public class AuthController extends BaseController{
@@ -40,7 +41,6 @@ public class AuthController extends BaseController{
     private final LoggedUser loggedUser;
     private final LogoutProcessor logoutProcessor;
     private final ValidateProcessor validateProcessor;
-
 
     @PostMapping(MappingConstants.login)
     @ApiResponses(value = {
