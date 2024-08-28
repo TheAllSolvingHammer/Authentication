@@ -20,10 +20,10 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        log.info("Started add interceptor");
+
         registry.addInterceptor(simpleUserInterceptor).addPathPatterns(
                 MappingConstants.demote
                 ,MappingConstants.promote
-                ,MappingConstants.change);
+                ,MappingConstants.change,MappingConstants.logout);
     }
 }

@@ -13,6 +13,7 @@
         <module>api</module>
         <module>persistence</module>
         <module>domain</module>
+        <module>restexport</module>
     </modules>
 
     <groupId>com.tinqinacademy.authentication</groupId>
@@ -127,6 +128,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 <!--        <dependency>-->
 <!--            <groupId>me.paulschwarz</groupId>-->

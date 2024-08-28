@@ -33,16 +33,14 @@ public class ChangePasswordProcessor extends BaseProcessor implements ChangePass
     @Override
     public Either<ErrorsProcessor, ChangePasswordOutput> process(ChangePasswordInput input) {
         return validateInput(input).flatMap(validInput -> Try.of(() -> {
-                    log.info("Start change password operation{}", input);
+
                     UserEntity user = getUser(input.getEmail());
                     checkPassword(input, user);
                     user.setPassword(passwordEncoder.encode(input.getNewPassword()));
                     userRepository.save(user);
-                    ChangePasswordOutput output = ChangePasswordOutput.builder()
+                    return ChangePasswordOutput.builder()
                             .message("Successfully change password")
                             .build();
-                    log.info("End change password operation{}",output);
-                    return output;
 
                 }).toEither()
                 .mapLeft(JwtEntityExceptionCase::handleThrowable));

@@ -13,6 +13,9 @@ import io.vavr.control.Either;
 import io.vavr.control.Try;
 import jakarta.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +26,7 @@ public class DemoteProcessor extends BaseProcessor implements RemovePrivilegesOp
     private final UserRepository userRepository;
 
 
+    @Autowired
     public DemoteProcessor(Validator validator, ConversionService conversionService, ErrorsProcessor errorMapper, UserRepository userRepository) {
         super(validator, conversionService, errorMapper);
         this.userRepository = userRepository;
@@ -30,25 +34,21 @@ public class DemoteProcessor extends BaseProcessor implements RemovePrivilegesOp
 
     @Override
     public Either<ErrorsProcessor, RemovePrivilegesOutput> process(RemovePrivilegesInput input) {
-        return validateInput(input).flatMap(validInput -> Try.of(()->{
-            log.info("Started remove privileges operation{}",input);
-           
-            UserEntity userEntity=userRepository.getReferenceById(input.getId());
-            checkForLowerPrivileges(userEntity);
-            userEntity.setRoleType(RoleType.USER);
-            userRepository.save(userEntity);
+        return validateInput(input).flatMap(validInput -> Try.of(() -> {
+                    UserEntity userEntity = userRepository.getReferenceById(input.getId());
+                    checkForLowerPrivileges(userEntity);
+                    userEntity.setRoleType(RoleType.USER);
+                    userRepository.save(userEntity);
 
-            RemovePrivilegesOutput output = RemovePrivilegesOutput.builder()
-                    .message("Successfully demoted user")
-                    .build();
-            log.info("End removed privileges operation{}",output);
-            return output;
+                    return RemovePrivilegesOutput.builder()
+                            .message("Successfully demoted user")
+                            .build();
                 }).toEither()
                 .mapLeft(InputQueryEntityExceptionCase::handleThrowable));
     }
 
     private void checkForLowerPrivileges(UserEntity userEntity) {
-        if(userEntity.getRoleType()==RoleType.USER){
+        if (userEntity.getRoleType() == RoleType.USER) {
             throw new EntityException("User already has the lowest right on the system");
         }
     }

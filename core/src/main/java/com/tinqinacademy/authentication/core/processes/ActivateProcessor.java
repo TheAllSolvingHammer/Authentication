@@ -14,6 +14,7 @@ import io.vavr.control.Either;
 import io.vavr.control.Try;
 import jakarta.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,8 @@ public class ActivateProcessor extends BaseProcessor implements ActivateOperatio
     private final ActivateCodeRepository activateCodeRepository;
     private final UserRepository userRepository;
 
+
+    @Autowired
     public ActivateProcessor(Validator validator, ConversionService conversionService, ErrorsProcessor errorMapper, ActivateCodeRepository activateCodeRepository, UserRepository userRepository) {
         super(validator, conversionService, errorMapper);
         this.activateCodeRepository = activateCodeRepository;
@@ -32,30 +35,27 @@ public class ActivateProcessor extends BaseProcessor implements ActivateOperatio
 
     @Override
     public Either<ErrorsProcessor, ActivateOutput> process(ActivateInput input) {
-        return validateInput(input).flatMap(validInput -> Try.of(()->{
-                log.info("Start activating operation{}",input);
-                ActivateCodeEntity activateCodeEntity = checkConfirmation(input.getConfirmationCode());
-                UserEntity user=checkUser(activateCodeEntity.getEmail());
-                user.setVerified(true);
-                userRepository.save(user);
-                activateCodeRepository.deleteById(activateCodeEntity.getUuid());
-                ActivateOutput activateOutput = ActivateOutput.builder()
-                        .message("User is activated")
-                        .build();
-                log.info("End activation operation{}",activateOutput);
-                return activateOutput;
-
+        return validateInput(input).flatMap(validInput -> Try.of(() -> {
+                    ActivateCodeEntity activateCodeEntity = checkConfirmation(input.getConfirmationCode());
+                    UserEntity user = checkUser(activateCodeEntity.getEmail());
+                    user.setVerified(true);
+                    userRepository.save(user);
+                    activateCodeRepository.deleteById(activateCodeEntity.getUuid());
+                    return ActivateOutput.builder()
+                            .message("User is activated")
+                            .build();
                 }).toEither()
                 .mapLeft(InputQueryEntityExceptionCase::handleThrowable));
     }
 
-    private ActivateCodeEntity checkConfirmation(String code){
+    private ActivateCodeEntity checkConfirmation(String code) {
         return activateCodeRepository.findByCode(code)
                 .orElseThrow(() -> new EntityException("No account with this code was found!"));
     }
 
-    private UserEntity checkUser(String email){
+
+    private UserEntity checkUser(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(()->new EntityException("No user account exist with this email. If this appears it mean the database was altered."));
+                .orElseThrow(() -> new EntityException("No user account exist with this email. If this appears it mean the database was altered."));
     }
 }

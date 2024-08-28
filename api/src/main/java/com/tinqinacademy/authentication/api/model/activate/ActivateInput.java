@@ -11,6 +11,6 @@ import lombok.*;
 @AllArgsConstructor()
 @Builder
 public class ActivateInput implements OperationInput {
-    @NotNull
+    @NotNull(message = "Confirmation code can not be null")
     private String confirmationCode;
 }
