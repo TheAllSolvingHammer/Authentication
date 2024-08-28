@@ -6,6 +6,7 @@ import com.tinqinacademy.authentication.api.exceptions.RegistrationLoginExceptio
 import com.tinqinacademy.authentication.api.model.login.LoginInput;
 import com.tinqinacademy.authentication.api.model.login.LoginOperation;
 import com.tinqinacademy.authentication.api.model.login.LoginOutput;
+import com.tinqinacademy.authentication.core.aspect.LogExecution;
 import com.tinqinacademy.authentication.core.families.casehandlers.InputQueryEntityExceptionCase;
 import com.tinqinacademy.authentication.core.util.JwtService;
 import com.tinqinacademy.authentication.persistence.entities.UserEntity;
@@ -22,7 +23,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
-
 @Service
 @Slf4j
 public class LoginProcessor extends BaseProcessor implements LoginOperation {
@@ -39,7 +39,7 @@ public class LoginProcessor extends BaseProcessor implements LoginOperation {
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
     }
-
+    @LogExecution
     @Override
     public Either<ErrorsProcessor, LoginOutput> process(LoginInput input) {
         return validateInput(input).flatMap(validInput -> Try.of(() -> {

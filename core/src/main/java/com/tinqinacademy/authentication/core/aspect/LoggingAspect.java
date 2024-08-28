@@ -14,12 +14,12 @@ import java.util.Arrays;
 @Slf4j
 public class LoggingAspect {
 
-    @Around("execution(* (@org.springframework.stereotype.Service *).*(..))")
-    public Object logServiceMethods(ProceedingJoinPoint joinPoint) throws Throwable {
-        return logExecution(joinPoint);
-    }
+//    @Around("execution(* (@org.springframework.stereotype.Service *).*(..))")
+//    public Object logServiceMethods(ProceedingJoinPoint joinPoint) throws Throwable {
+//        return logExecution(joinPoint);
+//    }
 
-    @Around("execution(* (@com.tinqinacademy.authentication.core.aspect.LogExecution *).*(..))")
+    @Around("@annotation(com.tinqinacademy.authentication.core.aspect.LogExecution)")
     public Object logControllerMethods(ProceedingJoinPoint joinPoint) throws Throwable {
         return logExecution(joinPoint);
     }
