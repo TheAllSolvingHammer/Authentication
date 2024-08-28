@@ -1,5 +1,6 @@
 package com.tinqinacademy.authentication.rest.controllers;
 
+import com.tinqinacademy.authentication.api.mappings.MappingConstants;
 import com.tinqinacademy.authentication.api.model.activate.ActivateInput;
 import com.tinqinacademy.authentication.api.model.change.ChangePasswordInput;
 import com.tinqinacademy.authentication.api.model.promote.PromotionInput;

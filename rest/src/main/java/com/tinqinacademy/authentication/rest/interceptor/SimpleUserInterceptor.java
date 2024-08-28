@@ -1,6 +1,7 @@
 package com.tinqinacademy.authentication.rest.interceptor;
 
 
+import com.tinqinacademy.authentication.api.mappings.MappingConstants;
 import com.tinqinacademy.authentication.core.util.JwtService;
 import com.tinqinacademy.authentication.persistence.entities.UserEntity;
 import com.tinqinacademy.authentication.persistence.enums.RoleType;
