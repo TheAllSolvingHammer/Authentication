@@ -11,6 +11,7 @@ import lombok.*;
 @AllArgsConstructor()
 @Builder
 public class EmailRecoveryInput implements OperationInput {
+
     @Email(message = "Given input is not email")
     private String email;
 }

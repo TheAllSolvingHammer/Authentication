@@ -1,5 +1,6 @@
 package com.tinqinacademy.authentication.rest.controllers;
 
+
 import com.tinqinacademy.authentication.api.exceptions.ErrorsProcessor;
 import com.tinqinacademy.authentication.api.mappings.MappingConstants;
 import com.tinqinacademy.authentication.api.model.activate.ActivateInput;
@@ -41,6 +42,7 @@ public class AuthController extends BaseController{
     private final LogoutProcessor logoutProcessor;
     private final ValidateProcessor validateProcessor;
 
+
     @PostMapping(MappingConstants.login)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User is logged in"),
@@ -50,6 +52,7 @@ public class AuthController extends BaseController{
     })
     @Operation(summary = "Logs in user")
     public ResponseEntity<?>  loginUser(@RequestBody LoginInput input){
+
         Either<ErrorsProcessor, LoginOutput> result=loginProcessor.process(input);
         return result.fold(
                 error -> ResponseEntity.status(error.getHttpStatus()).body(error),
@@ -142,6 +145,7 @@ public class AuthController extends BaseController{
     public ResponseEntity<?> demote(@RequestBody RemovePrivilegesInput input){
         return handleOperation(demoteProcessor.process(input));
     }
+
 
     @PostMapping(MappingConstants.logout)
     @ApiResponses(value = {

@@ -33,6 +33,7 @@ public class ChangePasswordProcessor extends BaseProcessor implements ChangePass
     @Override
     public Either<ErrorsProcessor, ChangePasswordOutput> process(ChangePasswordInput input) {
         return validateInput(input).flatMap(validInput -> Try.of(() -> {
+
                     UserEntity user = getUser(input.getEmail());
                     checkPassword(input, user);
                     user.setPassword(passwordEncoder.encode(input.getNewPassword()));

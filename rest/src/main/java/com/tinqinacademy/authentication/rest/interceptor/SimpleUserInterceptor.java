@@ -25,6 +25,7 @@ public class SimpleUserInterceptor implements HandlerInterceptor {
 private final LoggedUser loggedUser;
 private final JwtService jwtService;
 private final UserRepository userRepository;
+
 private final BlackListedRepository blackListedRepository;
 
     public SimpleUserInterceptor(LoggedUser loggedUser, JwtService jwtService, UserRepository userRepository, BlackListedRepository blackListedRepository) {
@@ -60,7 +61,6 @@ public boolean preHandle(HttpServletRequest request, HttpServletResponse respons
         response.sendError(HttpServletResponse.SC_FORBIDDEN);
         return false;
     }
-
     if (isAdminPath(request.getRequestURI()) && !userOptional.get().getRoleType().equals(RoleType.ADMIN)) {
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
         return false;

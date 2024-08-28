@@ -25,6 +25,7 @@ public class ActivateProcessor extends BaseProcessor implements ActivateOperatio
     private final ActivateCodeRepository activateCodeRepository;
     private final UserRepository userRepository;
 
+
     @Autowired
     public ActivateProcessor(Validator validator, ConversionService conversionService, ErrorsProcessor errorMapper, ActivateCodeRepository activateCodeRepository, UserRepository userRepository) {
         super(validator, conversionService, errorMapper);
@@ -43,7 +44,6 @@ public class ActivateProcessor extends BaseProcessor implements ActivateOperatio
                     return ActivateOutput.builder()
                             .message("User is activated")
                             .build();
-
                 }).toEither()
                 .mapLeft(InputQueryEntityExceptionCase::handleThrowable));
     }
@@ -52,6 +52,7 @@ public class ActivateProcessor extends BaseProcessor implements ActivateOperatio
         return activateCodeRepository.findByCode(code)
                 .orElseThrow(() -> new EntityException("No account with this code was found!"));
     }
+
 
     private UserEntity checkUser(String email) {
         return userRepository.findByEmail(email)

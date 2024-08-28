@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+
 @Service
 @Slf4j
 public class LoginProcessor extends BaseProcessor implements LoginOperation {
@@ -31,7 +32,6 @@ public class LoginProcessor extends BaseProcessor implements LoginOperation {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
-
     @Autowired
     public LoginProcessor(Validator validator, ConversionService conversionService, ErrorsProcessor errorMapper, UserRepository userRepository, JwtService jwtService, PasswordEncoder passwordEncoder) {
         super(validator, conversionService, errorMapper);
@@ -39,6 +39,7 @@ public class LoginProcessor extends BaseProcessor implements LoginOperation {
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
     }
+
     @LogExecution
     @Override
     public Either<ErrorsProcessor, LoginOutput> process(LoginInput input) {
@@ -70,8 +71,6 @@ public class LoginProcessor extends BaseProcessor implements LoginOperation {
 
     private void checkPasswordMatch(String password, UserEntity user) {
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            System.out.println(passwordEncoder.encode(password));
-            System.out.println(user.getPassword());
             throw new RegistrationLoginException("Password is incorrect!");
         }
     }
