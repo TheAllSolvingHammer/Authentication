@@ -1,7 +1,6 @@
 package com.tinqinacademy.authentication.rest.interceptor;
 
 
-import com.tinqinacademy.authentication.api.mappings.MappingConstants;
 import com.tinqinacademy.authentication.core.util.JwtService;
 import com.tinqinacademy.authentication.persistence.entities.UserEntity;
 import com.tinqinacademy.authentication.persistence.enums.RoleType;
@@ -32,6 +31,7 @@ private final UserRepository userRepository;
 
     @Override
 public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
+    log.info("Started simple interception");
     String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
     if (authorization == null || !authorization.startsWith("Bearer ")) {
         response.sendError(HttpServletResponse.SC_FORBIDDEN);

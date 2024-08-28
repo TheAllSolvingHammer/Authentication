@@ -14,7 +14,6 @@ import io.vavr.control.Either;
 import io.vavr.control.Try;
 import jakarta.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,9 +29,6 @@ public class LoginProcessor extends BaseProcessor implements LoginOperation {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
-
-
-    @Autowired
     public LoginProcessor(Validator validator, ConversionService conversionService, ErrorsProcessor errorMapper, UserRepository userRepository, JwtService jwtService, PasswordEncoder passwordEncoder) {
         super(validator, conversionService, errorMapper);
         this.userRepository = userRepository;
@@ -42,34 +38,36 @@ public class LoginProcessor extends BaseProcessor implements LoginOperation {
 
     @Override
     public Either<ErrorsProcessor, LoginOutput> process(LoginInput input) {
-        return validateInput(input).flatMap(validInput -> Try.of(() -> {
-                    UserEntity user = getUser(input.getUsername());
-                    checkUserConfirm(user);
-                    checkPasswordMatch(input.getPassword(), user);
-                    Map<String, String> claims = new HashMap<>();
-                    claims.put("role", user.getRoleType().name());
-                    String token = jwtService.generateToken(claims, user.getUsername());
+        return validateInput(input).flatMap(validInput -> Try.of(()->{
+        log.info("Started log in operation {}",input);
+
+        UserEntity user = getUser(input.getUsername());
+        checkUserConfirm(user);
+        checkPasswordMatch(input.getPassword(),user);
+        Map<String, String> claims = new HashMap<>();
+        claims.put("role", user.getRoleType().name());
+
+        String token = jwtService.generateToken(claims,user.getUsername());
                     HttpHeaders headers = new HttpHeaders();
-                    headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
-                    return LoginOutput.builder()
-                            .headers(headers)
-                            .build();
-                }).toEither()
+        headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
+        LoginOutput output = LoginOutput.builder()
+                .headers(headers)
+                .build();
+        log.info("End log in operation {}",output);
+        return output;
+        }).toEither()
                 .mapLeft(InputQueryEntityExceptionCase::handleThrowable));
     }
-
-    private UserEntity getUser(String username) {
-        return userRepository.findByUsername(username).orElseThrow(() -> new EntityException("Entity not found"));
+    private UserEntity getUser(String username){
+        return userRepository.findByUsername(username).orElseThrow(()->new EntityException("Entity not found"));
     }
-
-    private void checkUserConfirm(UserEntity user) {
-        if (user.getVerified().equals(Boolean.FALSE)) {
+    private void checkUserConfirm(UserEntity user){
+        if(user.getVerified().equals(Boolean.FALSE)){
             throw new RegistrationLoginException("User is not verified");
         }
     }
-
-    private void checkPasswordMatch(String password, UserEntity user) {
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+    private void checkPasswordMatch(String password,UserEntity user){
+        if(!passwordEncoder.matches(password,user.getPassword())){
             System.out.println(passwordEncoder.encode(password));
             System.out.println(user.getPassword());
             throw new RegistrationLoginException("Password is incorrect!");
